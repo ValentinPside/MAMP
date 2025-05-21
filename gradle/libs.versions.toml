@@ -7,12 +7,12 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.9.0"
 activityCompose = "1.10.1"
-composeBom = "2025.05.00"
+composeBom = "2025.05.01"
 navVersion = "2.9.0"
 roomVersion = "2.7.1"
 lifecycle = "2.9.0"
 dagger ="2.51.1"
-ksp = "1.9.21-1.0.15"
+ksp = "2.0.0-1.0.24"
 
 [libraries]
 room = { group = "androidx.room", name = "room-ktx", version.ref = "roomVersion" }
