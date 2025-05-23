@@ -1,4 +1,4 @@
-package com.example.mamp
+package com.example.mamp.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
