@@ -1,13 +1,20 @@
 package com.example.mamp.data.repositoryImpl
 
-import com.example.mamp.data.db.FirstLvlNoteEntity
+import com.example.mamp.data.db.MainDb
+import com.example.mamp.domain.models.FirstLvlNote
+import com.example.mamp.domain.repository.FirstLvlNoteRepository
+import com.example.mamp.utils.asFirstLvlNoteList
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class FirstLvlNoteRepository @Inject constructor(
-    private val dao: FirstLvlNoteDao
-) {
-    suspend fun insert(note: FirstLvlNoteEntity) = dao.insert(note)
-    suspend fun getAll() = dao.getAll()
-    suspend fun searchByName(query: String) = dao.searchByName(query)
-    suspend fun delete(note: FirstLvlNoteEntity) = dao.delete(note)
+class FirstLvlNoteRepositoryImpl @Inject constructor(private val db: MainDb):
+    FirstLvlNoteRepository {
+    override suspend fun getFirstLvlList(): List<FirstLvlNote> {
+        return withContext(Dispatchers.IO) {
+            val list = db.dao().getAll()
+            list.asFirstLvlNoteList()
+        }
+    }
+
 }
