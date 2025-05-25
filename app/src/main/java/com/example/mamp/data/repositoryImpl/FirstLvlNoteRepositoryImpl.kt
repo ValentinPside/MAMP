@@ -16,5 +16,4 @@ class FirstLvlNoteRepositoryImpl @Inject constructor(private val db: MainDb):
             list.asFirstLvlNoteList()
         }
     }
-
 }

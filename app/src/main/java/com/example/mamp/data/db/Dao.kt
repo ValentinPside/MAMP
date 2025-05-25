@@ -9,13 +9,13 @@ import androidx.room.Query
 @Dao
 interface Dao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(note: FirstLvlNoteEntity): Int
+    suspend fun insert(note: FirstLvlNoteEntity)
 
     @Query("SELECT * FROM firstLvlNoteTable ORDER BY id DESC")
     suspend fun getAll(): List<FirstLvlNoteEntity>
 
-    @Query("SELECT * FROM firstLvlNoteTable WHERE name LIKE '%' || :query || '%'")
-    suspend fun searchByName(query: String): List<FirstLvlNoteEntity>
+    @Query("SELECT * FROM firstLvlNoteTable WHERE name = :id")
+    suspend fun getFirstLvlNoteById(id: Int): FirstLvlNoteEntity
 
     @Delete
     suspend fun delete(note: FirstLvlNoteEntity)

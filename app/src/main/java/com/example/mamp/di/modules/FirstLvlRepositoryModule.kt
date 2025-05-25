@@ -6,7 +6,8 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-interface FirstLvlRepositoryModule {
+object FirstLvlRepositoryModule {
     @Provides
-    fun provideFirstLvlNoteRepository(impl: FirstLvlNoteRepositoryImpl): FirstLvlNoteRepository = impl
+    fun provideFirstLvlNoteRepository(impl: FirstLvlNoteRepositoryImpl): FirstLvlNoteRepository =
+        impl
 }

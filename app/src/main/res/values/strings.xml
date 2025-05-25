@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MAMP</string>
+    <string name="error_message">Не удалось произвести загрузку</string>
 </resources>
