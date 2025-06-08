@@ -1,5 +1,6 @@
 package com.example.mamp.ui.viewmodels
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mamp.R
@@ -9,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 class FirstLvlNoteViewModel @Inject constructor(
@@ -29,6 +31,22 @@ class FirstLvlNoteViewModel @Inject constructor(
             } finally {
                 state.update { it.copy(isLoading = false) }
             }
+        }
+    }
+
+    fun addPdfFile(uri: Uri) {
+        viewModelScope.launch {
+            val fileName = uri.lastPathSegment?.substringAfterLast("/") ?: "PDF"
+
+            val newNote = FirstLvlNote(
+                id = 0,
+                name = fileName,
+                fileAddress = uri.toString(),
+                targetDate = LocalDate.now().plusDays(30) // по умолчанию через 30 дней
+            )
+
+            repository.insertNote(newNote)
+            getFirstLvlList() // обновим список
         }
     }
 
