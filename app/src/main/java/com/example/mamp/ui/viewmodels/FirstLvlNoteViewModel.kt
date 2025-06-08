@@ -6,11 +6,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.mamp.R
 import com.example.mamp.domain.models.FirstLvlNote
 import com.example.mamp.domain.repository.FirstLvlNoteRepository
+import com.example.mamp.utils.NoteColorFilter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 class FirstLvlNoteViewModel @Inject constructor(
@@ -20,12 +22,18 @@ class FirstLvlNoteViewModel @Inject constructor(
     private val state = MutableStateFlow(ViewStateFirstLvlNote())
     fun observeUi() = state.asStateFlow()
 
+    private val allNotes = mutableListOf<FirstLvlNote>() // все заметки без фильтра
+    private val currentFilter = MutableStateFlow<NoteColorFilter?>(null)
+    private val currentSearch = MutableStateFlow("")
+
     fun getFirstLvlList() {
         viewModelScope.launch {
             state.update { it.copy(isLoading = true) }
             try {
                 val list = repository.getFirstLvlList()
-                state.update { it.copy(firstLvlList = list, error = null) }
+                allNotes.clear()
+                allNotes.addAll(list)
+                applyFilters()
             } catch (e: Exception) {
                 state.update { it.copy(error = R.string.error_message) }
             } finally {
@@ -34,19 +42,49 @@ class FirstLvlNoteViewModel @Inject constructor(
         }
     }
 
-    fun addPdfFile(uri: Uri) {
-        viewModelScope.launch {
-            val fileName = uri.lastPathSegment?.substringAfterLast("/") ?: "PDF"
+    fun setFilter(filter: NoteColorFilter?) {
+        currentFilter.value = filter
+        applyFilters()
+        state.update { it.copy(selectedColor = filter) }
+    }
 
+    fun setSearchQuery(query: String) {
+        currentSearch.value = query
+        applyFilters()
+    }
+
+    private fun applyFilters() {
+        val filter = currentFilter.value
+        val query = currentSearch.value.lowercase()
+
+        val filteredList = allNotes.filter { note ->
+            val matchesColor = when (filter) {
+                NoteColorFilter.RED -> ChronoUnit.DAYS.between(LocalDate.now(), note.targetDate) <= 14
+                NoteColorFilter.YELLOW -> ChronoUnit.DAYS.between(LocalDate.now(), note.targetDate) in 15..28
+                NoteColorFilter.GREEN -> ChronoUnit.DAYS.between(LocalDate.now(), note.targetDate) > 28
+                null -> true
+            }
+
+            val matchesQuery = note.name.lowercase().contains(query)
+
+            matchesColor && matchesQuery
+        }
+
+        state.update { it ->
+            it.copy(firstLvlList = filteredList.sortedBy { it.targetDate })
+        }
+    }
+
+    fun addPdfFile(uri: Uri, address: String, targetDate: LocalDate) {
+        viewModelScope.launch {
             val newNote = FirstLvlNote(
                 id = 0,
-                name = fileName,
+                name = address,
                 fileAddress = uri.toString(),
-                targetDate = LocalDate.now().plusDays(30) // по умолчанию через 30 дней
+                targetDate = targetDate
             )
-
             repository.insertNote(newNote)
-            getFirstLvlList() // обновим список
+            getFirstLvlList()
         }
     }
 
@@ -55,5 +93,6 @@ class FirstLvlNoteViewModel @Inject constructor(
 data class ViewStateFirstLvlNote(
     val firstLvlList: List<FirstLvlNote>? = null,
     val error: Int? = null,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val selectedColor: NoteColorFilter? = null
 )
