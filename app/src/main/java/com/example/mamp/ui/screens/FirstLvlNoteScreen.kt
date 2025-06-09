@@ -191,7 +191,9 @@ fun FirstLvlNoteScreen(
                         modifier = Modifier.fillMaxSize()
                     ) {
                         items(notes) { note ->
-                            FirstLvlNoteItem(note)
+                            FirstLvlNoteItem(note = note) {
+                                navController.navigate("second_lvl_note_screen/${note.id}")
+                            }
                         }
                     }
                 }

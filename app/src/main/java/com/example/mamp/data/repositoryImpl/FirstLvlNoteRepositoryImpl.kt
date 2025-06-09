@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class FirstLvlNoteRepositoryImpl @Inject constructor(private val db: MainDb):
+class FirstLvlNoteRepositoryImpl @Inject constructor(private val db: MainDb) :
     FirstLvlNoteRepository {
     override suspend fun getFirstLvlList(): List<FirstLvlNote> {
         return withContext(Dispatchers.IO) {

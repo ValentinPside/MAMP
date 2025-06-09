@@ -1,0 +1,25 @@
+package com.example.mamp.data.repositoryImpl
+
+import com.example.mamp.data.db.MainDb
+import com.example.mamp.domain.models.FirstLvlNote
+import com.example.mamp.domain.models.SecondLvlNote
+import com.example.mamp.domain.repository.SecondLvlNoteRepository
+import com.example.mamp.utils.asFirstLvlNote
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
+
+class SecondLvlNoteRepositoryImpl @Inject constructor(private val db: MainDb) :
+    SecondLvlNoteRepository {
+    override suspend fun getFirstLvlNoteById(noteId: Int): FirstLvlNote {
+        return withContext(Dispatchers.IO) {
+            val note = db.dao().getFirstLvlNoteById(noteId)
+            note.asFirstLvlNote()
+        }
+    }
+
+    override suspend fun getSecondLvlNotesByParentId(noteId: Int): List<SecondLvlNote> {
+        TODO("Not yet implemented")
+    }
+
+}

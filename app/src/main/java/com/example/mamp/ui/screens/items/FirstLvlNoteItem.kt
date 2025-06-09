@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -29,7 +30,7 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 @Composable
-fun FirstLvlNoteItem(note: FirstLvlNote) {
+fun FirstLvlNoteItem(note: FirstLvlNote, onClick: () -> Unit) {
     val daysLeft = ChronoUnit.DAYS.between(LocalDate.now(), note.targetDate)
     val bgColor = when {
         daysLeft <= 14 -> Color.Red
@@ -46,6 +47,7 @@ fun FirstLvlNoteItem(note: FirstLvlNote) {
                 .padding(4.dp)
                 .aspectRatio(1f)
                 .fillMaxWidth()
+                .clickable { onClick() }
         ) {
             Column(
                 modifier = Modifier
