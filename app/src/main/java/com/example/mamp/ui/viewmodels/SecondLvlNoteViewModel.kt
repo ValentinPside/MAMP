@@ -1,5 +1,6 @@
 package com.example.mamp.ui.viewmodels
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mamp.domain.models.FirstLvlNote
@@ -9,7 +10,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import javax.inject.Inject
 
 class SecondLvlNoteViewModel @Inject constructor(
@@ -27,15 +27,21 @@ class SecondLvlNoteViewModel @Inject constructor(
         }
     }
 
-    fun addSecondLvlNote(parentId: Int, name: String, date: LocalDate) {
+    fun addSecondLvlNote(parentId: Int, name: String, uri: Uri) {
         viewModelScope.launch {
-            repository.insertSecondLvlNote(SecondLvlNote(parentId, name, date))
+            val newNote = SecondLvlNote(
+                id = 0,
+                parentId = parentId,
+                name = name,
+                fileAddress = uri.toString()
+            )
+            repository.insertSecondLvlNote(newNote)
             loadNotesForFirstLvl(parentId)
         }
     }
 }
 
 data class ViewStateSecondLvlNote(
-    val parentNote: FirstLvlNote? = null, // основной документ
-    val childNotes: List<SecondLvlNote> = emptyList() // вложенные документы
+    val parentNote: FirstLvlNote? = null,
+    val childNotes: List<SecondLvlNote> = emptyList()
 )

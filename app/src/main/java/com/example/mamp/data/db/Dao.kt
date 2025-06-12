@@ -16,7 +16,7 @@ interface Dao {
     @Query("SELECT * FROM firstLvlNoteTable ORDER BY id DESC")
     suspend fun getAllFirstLvlNote(): List<FirstLvlNoteEntity>
 
-    @Query("SELECT * FROM firstLvlNoteTable WHERE name = :id")
+    @Query("SELECT * FROM firstLvlNoteTable WHERE id = :id")
     suspend fun getFirstLvlNoteById(id: Int): FirstLvlNoteEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
