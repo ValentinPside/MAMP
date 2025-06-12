@@ -1,8 +1,10 @@
 package com.example.mamp.utils
 
 import androidx.compose.ui.graphics.Color
-import com.example.mamp.data.db.FirstLvlNoteEntity
+import com.example.mamp.data.db.entities.FirstLvlNoteEntity
+import com.example.mamp.data.db.entities.SecondLvlNoteEntity
 import com.example.mamp.domain.models.FirstLvlNote
+import com.example.mamp.domain.models.SecondLvlNote
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
@@ -29,5 +31,20 @@ fun FirstLvlNote.asFirstLvlNoteEntity() = FirstLvlNoteEntity(
     targetDate = this.targetDate,
     fileAddress = this.fileAddress
 )
+
+fun SecondLvlNoteEntity.asSecondLvlNote() = SecondLvlNote(
+    id = this.id,
+    parentId = this.parentId,
+    name = this.name,
+    fileAddress = this.fileAddress
+)
+
+fun SecondLvlNote.asSecondLvlNoteEntity() = SecondLvlNoteEntity(
+    id = this.id,
+    parentId = this.parentId,
+    name = this.name,
+    fileAddress = this.fileAddress
+)
+fun List<SecondLvlNoteEntity>.asSecondLvlNoteList() = this.map { it.asSecondLvlNote() }
 
 fun List<FirstLvlNoteEntity>.asFirstLvlNoteList() = this.map { it.asFirstLvlNote() }

@@ -1,4 +1,4 @@
-package com.example.mamp.data.db
+package com.example.mamp.data.db.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
