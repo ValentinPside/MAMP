@@ -42,34 +42,45 @@ android {
 }
 
 dependencies {
+    // Core и Compose
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.foundation)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.material.icons)
+
+    // Жизненный цикл и ViewModel
+    implementation(libs.lifecycle)
+    implementation(libs.lifecycle.runtime.compose)
+
+    // Навигация
+    implementation(libs.navigation)
+
+    // Room
+    implementation(libs.room)
+    ksp(libs.room.compiler)
+
+    // Dagger
+    implementation(libs.dagger)
+    kapt(libs.dagger.compiler)
+
+    // Benchmark
     implementation(libs.androidx.benchmark.macro)
+
+    // Тестирование
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+
+    // Debug tools
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
-    //Room
-    implementation(libs.room)
-    ksp(libs.room.compiler)
-
-    //Lifecycle
-    implementation(libs.lifecycle)
-
-    //Dagger
-    implementation(libs.dagger)
-    kapt(libs.dagger.compiler)
-
-    //Navigation
-    implementation(libs.navigation)
 }
