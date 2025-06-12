@@ -5,6 +5,7 @@ import com.example.mamp.domain.models.FirstLvlNote
 import com.example.mamp.domain.models.SecondLvlNote
 import com.example.mamp.domain.repository.SecondLvlNoteRepository
 import com.example.mamp.utils.asFirstLvlNote
+import com.example.mamp.utils.asSecondLvlNoteList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -19,7 +20,10 @@ class SecondLvlNoteRepositoryImpl @Inject constructor(private val db: MainDb) :
     }
 
     override suspend fun getSecondLvlNotesByParentId(noteId: Int): List<SecondLvlNote> {
-        TODO("Not yet implemented")
+        return withContext(Dispatchers.IO) {
+            val list = db.dao().getAllSecondLvlNote(noteId)
+            list.asSecondLvlNoteList()
+        }
     }
 
 }

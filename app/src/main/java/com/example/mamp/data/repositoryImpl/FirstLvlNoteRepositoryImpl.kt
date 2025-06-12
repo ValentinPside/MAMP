@@ -13,13 +13,13 @@ class FirstLvlNoteRepositoryImpl @Inject constructor(private val db: MainDb) :
     FirstLvlNoteRepository {
     override suspend fun getFirstLvlList(): List<FirstLvlNote> {
         return withContext(Dispatchers.IO) {
-            val list = db.dao().getAll()
+            val list = db.dao().getAllFirstLvlNote()
             list.asFirstLvlNoteList()
         }
     }
 
     override suspend fun insertNote(note: FirstLvlNote) {
         val noteEntity = note.asFirstLvlNoteEntity()
-        db.dao().insert(noteEntity)
+        db.dao().insertFirstLvlNote(noteEntity)
     }
 }

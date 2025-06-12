@@ -114,7 +114,7 @@ fun SecondLvlNoteScreen(
                 },
                 confirmButton = {
                     TextButton(onClick = {
-                        viewModel.addSecondLvlNote(noteId, name, date)
+                        //viewModel.addSecondLvlNote(noteId, name, date)
                         showDialog = false
                     }) {
                         Text("Сохранить")
