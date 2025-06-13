@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.example.mamp.data.db.entities.FirstLvlNoteEntity
 import com.example.mamp.data.db.entities.SecondLvlNoteEntity
 
@@ -24,6 +25,9 @@ interface Dao {
 
     @Query("SELECT * FROM secondLvlNoteTable WHERE parent_id = :id ORDER BY id DESC")
     suspend fun getAllSecondLvlNote(id: Int): List<SecondLvlNoteEntity>
+
+    @Update
+    suspend fun updateFirstLvlNote(note: FirstLvlNoteEntity)
 
     @Delete
     suspend fun deleteFirstLvlNote(note: FirstLvlNoteEntity)

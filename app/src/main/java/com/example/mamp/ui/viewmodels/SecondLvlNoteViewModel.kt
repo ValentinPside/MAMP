@@ -39,6 +39,16 @@ class SecondLvlNoteViewModel @Inject constructor(
             loadNotesForFirstLvl(parentId)
         }
     }
+
+    fun toggleFinishedState() {
+        viewModelScope.launch {
+            val currentNote = state.value.parentNote ?: return@launch
+            val newStatus = if (currentNote.isFinished == 1) 0 else 1
+            val updatedNote = currentNote.copy(isFinished = newStatus)
+            repository.updateFirstLvlNote(updatedNote)
+            loadNotesForFirstLvl(currentNote.id)
+        }
+    }
 }
 
 data class ViewStateSecondLvlNote(

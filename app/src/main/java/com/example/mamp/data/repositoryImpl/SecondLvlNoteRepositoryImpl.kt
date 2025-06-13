@@ -5,6 +5,7 @@ import com.example.mamp.domain.models.FirstLvlNote
 import com.example.mamp.domain.models.SecondLvlNote
 import com.example.mamp.domain.repository.SecondLvlNoteRepository
 import com.example.mamp.utils.asFirstLvlNote
+import com.example.mamp.utils.asFirstLvlNoteEntity
 import com.example.mamp.utils.asSecondLvlNoteEntity
 import com.example.mamp.utils.asSecondLvlNoteList
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +31,11 @@ class SecondLvlNoteRepositoryImpl @Inject constructor(private val db: MainDb) :
     override suspend fun insertSecondLvlNote(note: SecondLvlNote) {
         val noteEntity = note.asSecondLvlNoteEntity()
         db.dao().insertSecondLvlNote(noteEntity)
+    }
+
+    override suspend fun updateFirstLvlNote(note: FirstLvlNote) {
+        val noteEntity = note.asFirstLvlNoteEntity()
+        db.dao().updateFirstLvlNote(noteEntity)
     }
 
 }

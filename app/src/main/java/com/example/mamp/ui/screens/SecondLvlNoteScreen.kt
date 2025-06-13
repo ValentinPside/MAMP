@@ -31,13 +31,10 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.style.TextOverflow
 import com.example.mamp.domain.models.FirstLvlNote
@@ -45,13 +42,20 @@ import com.example.mamp.domain.models.SecondLvlNote
 import androidx.compose.material3.Scaffold
 import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import com.example.mamp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -117,10 +121,12 @@ fun SecondLvlNoteScreen(
             )
         }
     ) { innerPadding ->
-        Column(modifier = Modifier
-            .padding(innerPadding)
-            .padding(16.dp)
-            .fillMaxSize()
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(16.dp)
+                .background(MaterialTheme.colorScheme.background)
+                .fillMaxSize()
         ) {
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -133,7 +139,9 @@ fun SecondLvlNoteScreen(
                 columns = GridCells.Fixed(3),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f) // 👈 добавлено
             ) {
                 items(documents) { doc ->
                     Column(
@@ -142,13 +150,13 @@ fun SecondLvlNoteScreen(
                             .clickable { openFile(Uri.parse(doc.fileAddress)) }
                             .padding(8.dp)
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Done,
+                        Image(
+                            painter = painterResource(id = R.drawable.doc_icon),
                             contentDescription = null,
                             modifier = Modifier
-                                .size(48.dp)
+                                .size(40.dp)
                                 .align(Alignment.CenterHorizontally),
-                            tint = Color.Red
+                            contentScale = ContentScale.Fit
                         )
                         Text(
                             text = doc.name,
@@ -161,45 +169,66 @@ fun SecondLvlNoteScreen(
                 }
             }
 
-            if (showAddDialog && selectedPdfUri != null) {
-                var name by remember { mutableStateOf("") }
+            Spacer(modifier = Modifier.height(16.dp))
 
-                AlertDialog(
-                    onDismissRequest = {
-                        showAddDialog = false
-                        selectedPdfUri = null
-                    },
-                    title = { Text("Добавить вложение") },
-                    text = {
-                        OutlinedTextField(
-                            value = name,
-                            onValueChange = { name = it },
-                            label = { Text("Название") },
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    },
-                    confirmButton = {
-                        TextButton(onClick = {
-                            selectedPdfUri?.let { uri ->
-                                viewModel.addSecondLvlNote(noteId, name, uri)
-                            }
-                            showAddDialog = false
-                            selectedPdfUri = null
-                        }) {
-                            Text("Сохранить")
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(onClick = {
-                            showAddDialog = false
-                            selectedPdfUri = null
-                        }) {
-                            Text("Отмена")
-                        }
-                    }
+            Button(
+                onClick = { viewModel.toggleFinishedState() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp)
+            ) {
+                Text(
+                    if (state.parentNote?.isFinished == 1) "Отметить как выполненное" else "Отметить как невыполненное"
                 )
             }
         }
+    }
+    if (showAddDialog && selectedPdfUri != null) {
+        var fileName by remember { mutableStateOf("") }
+
+        AlertDialog(
+            onDismissRequest = {
+                showAddDialog = false
+                selectedPdfUri = null
+            },
+            title = { Text("Добавить вложение") },
+            text = {
+                OutlinedTextField(
+                    value = fileName,
+                    onValueChange = { fileName = it },
+                    label = { Text("Введите имя файла") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        val uri = selectedPdfUri
+                        if (uri != null && fileName.isNotBlank()) {
+                            viewModel.addSecondLvlNote(
+                                parentId = noteId,
+                                name = fileName,
+                                uri = uri
+                            )
+                            showAddDialog = false
+                            selectedPdfUri = null
+                        }
+                    }
+                ) {
+                    Text("Сохранить")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showAddDialog = false
+                        selectedPdfUri = null
+                    }
+                ) {
+                    Text("Отмена")
+                }
+            }
+        )
     }
 }
 
