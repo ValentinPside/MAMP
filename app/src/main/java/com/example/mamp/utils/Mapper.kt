@@ -22,14 +22,16 @@ fun FirstLvlNoteEntity.asFirstLvlNote() = FirstLvlNote(
     id = this.id,
     name = this.name,
     targetDate = this.targetDate,
-    fileAddress = this.fileAddress
+    fileAddress = this.fileAddress,
+    isFinished = this.isFinished
 )
 
 fun FirstLvlNote.asFirstLvlNoteEntity() = FirstLvlNoteEntity(
     id = this.id,
     name = this.name,
     targetDate = this.targetDate,
-    fileAddress = this.fileAddress
+    fileAddress = this.fileAddress,
+    isFinished = this.isFinished
 )
 
 fun SecondLvlNoteEntity.asSecondLvlNote() = SecondLvlNote(

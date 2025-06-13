@@ -56,23 +56,28 @@ class FirstLvlNoteViewModel @Inject constructor(
     private fun applyFilters() {
         val filter = currentFilter.value
         val query = currentSearch.value.lowercase()
+        val showOnlyFinished = state.value.showOnlyFinished
 
-        val filteredList = allNotes.filter { note ->
-            val matchesColor = when (filter) {
-                NoteColorFilter.RED -> ChronoUnit.DAYS.between(LocalDate.now(), note.targetDate) <= 14
-                NoteColorFilter.YELLOW -> ChronoUnit.DAYS.between(LocalDate.now(), note.targetDate) in 15..28
-                NoteColorFilter.GREEN -> ChronoUnit.DAYS.between(LocalDate.now(), note.targetDate) > 28
-                null -> true
+        val filteredList = allNotes
+            .filter { note ->
+                val matchesColor = when (filter) {
+                    NoteColorFilter.RED -> ChronoUnit.DAYS.between(LocalDate.now(), note.targetDate) <= 14
+                    NoteColorFilter.YELLOW -> ChronoUnit.DAYS.between(LocalDate.now(), note.targetDate) in 15..28
+                    NoteColorFilter.GREEN -> ChronoUnit.DAYS.between(LocalDate.now(), note.targetDate) > 28
+                    null -> true
+                }
+
+                val matchesQuery = note.name.lowercase().contains(query)
+                val matchesFinished = if (showOnlyFinished) note.isFinished == 0 else true
+
+                matchesColor && matchesQuery && matchesFinished
             }
 
-            val matchesQuery = note.name.lowercase().contains(query)
+        val (unfinished, finished) = filteredList.partition { it.isFinished == 1 }
 
-            matchesColor && matchesQuery
-        }
+        val sorted = unfinished.sortedBy { it.targetDate } + finished.sortedBy { it.targetDate }
 
-        state.update { it ->
-            it.copy(firstLvlList = filteredList.sortedBy { it.targetDate })
-        }
+        state.update { it.copy(firstLvlList = sorted) }
     }
 
     fun addPdfFile(uri: Uri, address: String, targetDate: LocalDate) {
@@ -81,11 +86,19 @@ class FirstLvlNoteViewModel @Inject constructor(
                 id = 0,
                 name = address,
                 fileAddress = uri.toString(),
-                targetDate = targetDate
+                targetDate = targetDate,
+                isFinished = 1
             )
             repository.insertNote(newNote)
             getFirstLvlList()
         }
+    }
+
+    fun toggleShowOnlyFinished() {
+        state.update {
+            it.copy(showOnlyFinished = !it.showOnlyFinished)
+        }
+        applyFilters()
     }
 
 }
@@ -94,5 +107,6 @@ data class ViewStateFirstLvlNote(
     val firstLvlList: List<FirstLvlNote>? = null,
     val error: Int? = null,
     val isLoading: Boolean = false,
-    val selectedColor: NoteColorFilter? = null
+    val selectedColor: NoteColorFilter? = null,
+    val showOnlyFinished: Boolean = false
 )

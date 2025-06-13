@@ -54,6 +54,7 @@ import com.example.mamp.R
 import com.example.mamp.ui.screens.items.DatePickerButton
 import com.example.mamp.ui.screens.items.FilterCircle
 import com.example.mamp.ui.screens.items.FirstLvlNoteItem
+import com.example.mamp.ui.screens.items.ShowFinishedToggle
 import com.example.mamp.utils.NoteColorFilter
 import java.time.LocalDate
 
@@ -136,33 +137,42 @@ fun FirstLvlNoteScreen(
                 Icon(Icons.Default.Add, contentDescription = "Добавить файл")
             }
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                val selected = firstLvlListState.selectedColor
+            Column(horizontalAlignment = Alignment.End) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    val selected = firstLvlListState.selectedColor
 
-                FilterCircle(
-                    color = Color.Gray,
-                    selected = selected == null,
-                    onClick = { viewModel.setFilter(null) },
-                    icon = Icons.Default.Clear
-                )
+                    FilterCircle(
+                        color = Color.Gray,
+                        selected = selected == null,
+                        onClick = { viewModel.setFilter(null) },
+                        icon = Icons.Default.Clear
+                    )
 
-                FilterCircle(
-                    color = Color.Red,
-                    selected = selected == NoteColorFilter.RED,
-                    onClick = { viewModel.setFilter(if (selected == NoteColorFilter.RED) null else NoteColorFilter.RED) }
-                )
-                FilterCircle(
-                    color = Color.Yellow,
-                    selected = selected == NoteColorFilter.YELLOW,
-                    onClick = { viewModel.setFilter(if (selected == NoteColorFilter.YELLOW) null else NoteColorFilter.YELLOW) }
-                )
-                FilterCircle(
-                    color = Color.Green,
-                    selected = selected == NoteColorFilter.GREEN,
-                    onClick = { viewModel.setFilter(if (selected == NoteColorFilter.GREEN) null else NoteColorFilter.GREEN) }
+                    FilterCircle(
+                        color = Color.Red,
+                        selected = selected == NoteColorFilter.RED,
+                        onClick = { viewModel.setFilter(if (selected == NoteColorFilter.RED) null else NoteColorFilter.RED) }
+                    )
+                    FilterCircle(
+                        color = Color.Yellow,
+                        selected = selected == NoteColorFilter.YELLOW,
+                        onClick = { viewModel.setFilter(if (selected == NoteColorFilter.YELLOW) null else NoteColorFilter.YELLOW) }
+                    )
+                    FilterCircle(
+                        color = Color.Green,
+                        selected = selected == NoteColorFilter.GREEN,
+                        onClick = { viewModel.setFilter(if (selected == NoteColorFilter.GREEN) null else NoteColorFilter.GREEN) }
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                ShowFinishedToggle(
+                    isChecked = firstLvlListState.showOnlyFinished,
+                    onCheckedChange = { viewModel.toggleShowOnlyFinished() }
                 )
             }
         }

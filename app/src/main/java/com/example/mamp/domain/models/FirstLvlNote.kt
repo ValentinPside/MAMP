@@ -6,5 +6,6 @@ data class FirstLvlNote(
     val id: Int,
     val name: String,
     val targetDate: LocalDate,
-    val fileAddress: String
+    val fileAddress: String,
+    val isFinished: Int
 )

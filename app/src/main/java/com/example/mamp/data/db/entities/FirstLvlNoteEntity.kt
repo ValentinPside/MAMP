@@ -17,5 +17,8 @@ data class FirstLvlNoteEntity(
     @ColumnInfo(name = "target_date")
     val targetDate: LocalDate,
     @ColumnInfo(name = "file_address")
-    val fileAddress: String
+    val fileAddress: String,
+    @ColumnInfo(name = "is_finished")
+    val isFinished: Int
+
 )
