@@ -14,6 +14,7 @@ import javax.inject.Inject
 
 class SecondLvlNoteRepositoryImpl @Inject constructor(private val db: MainDb) :
     SecondLvlNoteRepository {
+
     override suspend fun getFirstLvlNoteById(noteId: Int): FirstLvlNote {
         return withContext(Dispatchers.IO) {
             val note = db.dao().getFirstLvlNoteById(noteId)

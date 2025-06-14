@@ -11,7 +11,6 @@ class App : Application() {
         appComponent = DaggerAppComponent.factory().create(this)
     }
 
-
     companion object {
         lateinit var appComponent: AppComponent
             private set

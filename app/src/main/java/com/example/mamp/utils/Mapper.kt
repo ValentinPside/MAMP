@@ -34,6 +34,7 @@ fun SecondLvlNote.asSecondLvlNoteEntity() = SecondLvlNoteEntity(
     name = this.name,
     fileAddress = this.fileAddress
 )
+
 fun List<SecondLvlNoteEntity>.asSecondLvlNoteList() = this.map { it.asSecondLvlNote() }
 
 fun List<FirstLvlNoteEntity>.asFirstLvlNoteList() = this.map { it.asFirstLvlNote() }

@@ -30,8 +30,10 @@ import java.time.temporal.ChronoUnit
 
 @Composable
 fun FirstLvlNoteItem(note: FirstLvlNote, onClick: () -> Unit) {
-    val backgroundColor = getColorByDate(note.targetDate, note
-        .isFinished)
+    val backgroundColor = getColorByDate(
+        note.targetDate, note
+            .isFinished
+    )
 
     Column(
         modifier = Modifier

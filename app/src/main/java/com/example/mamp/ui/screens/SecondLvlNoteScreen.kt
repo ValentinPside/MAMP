@@ -141,7 +141,7 @@ fun SecondLvlNoteScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f) // 👈 добавлено
+                    .weight(1f)
             ) {
                 items(documents) { doc ->
                     Column(
@@ -232,7 +232,6 @@ fun SecondLvlNoteScreen(
     }
 }
 
-// Вспомогательная функция
 private fun FirstLvlNote.toSecondLvlNote(): SecondLvlNote {
     return SecondLvlNote(
         id = this.id,

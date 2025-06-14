@@ -61,9 +61,21 @@ class FirstLvlNoteViewModel @Inject constructor(
         val filteredList = allNotes
             .filter { note ->
                 val matchesColor = when (filter) {
-                    NoteColorFilter.RED -> ChronoUnit.DAYS.between(LocalDate.now(), note.targetDate) <= 14
-                    NoteColorFilter.YELLOW -> ChronoUnit.DAYS.between(LocalDate.now(), note.targetDate) in 15..28
-                    NoteColorFilter.GREEN -> ChronoUnit.DAYS.between(LocalDate.now(), note.targetDate) > 28
+                    NoteColorFilter.RED -> ChronoUnit.DAYS.between(
+                        LocalDate.now(),
+                        note.targetDate
+                    ) <= 14
+
+                    NoteColorFilter.YELLOW -> ChronoUnit.DAYS.between(
+                        LocalDate.now(),
+                        note.targetDate
+                    ) in 15..28
+
+                    NoteColorFilter.GREEN -> ChronoUnit.DAYS.between(
+                        LocalDate.now(),
+                        note.targetDate
+                    ) > 28
+
                     null -> true
                 }
 

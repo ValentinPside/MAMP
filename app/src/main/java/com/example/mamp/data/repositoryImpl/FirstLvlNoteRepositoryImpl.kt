@@ -11,6 +11,7 @@ import javax.inject.Inject
 
 class FirstLvlNoteRepositoryImpl @Inject constructor(private val db: MainDb) :
     FirstLvlNoteRepository {
+
     override suspend fun getFirstLvlList(): List<FirstLvlNote> {
         return withContext(Dispatchers.IO) {
             val list = db.dao().getAllFirstLvlNote()
@@ -22,4 +23,5 @@ class FirstLvlNoteRepositoryImpl @Inject constructor(private val db: MainDb) :
         val noteEntity = note.asFirstLvlNoteEntity()
         db.dao().insertFirstLvlNote(noteEntity)
     }
+
 }
